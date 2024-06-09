@@ -9,7 +9,6 @@ import base64
 matplotlib.use('agg')
 
 def calculate_domain(request):
-
     if request.method == 'POST' and 'training_file' in request.FILES and 'test_file' in request.FILES:
         X_train = pd.read_csv(request.FILES['training_file'],index_col= 0)
         X_train.dropna(inplace=True)

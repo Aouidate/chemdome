@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Applicability domain for 2D-QSAR models using PCA Bounding Box</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .upload-form {
+            padding: 220px;
+            background-color: #fcfcfc;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .upload-form input[type="file"] {
+            display: none;
+        }
+        
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .upload-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .file-label {
+            display: inline-block;
+            background-color: #f5f5f5;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .file-label:hover {
+            background-color: #ddd;
+        }
+        
+        .file-name {
+            font-size: 16px;
+            color: #333;
+            margin-left: 10px;
+        }
+        
+        .description {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-form">
+        <h1><i>Applicability domain for 2D-QSAR models using PCA Bounding Box</i></h1>
+        <div class="description">
+            <p><i><g> AD is a theoretical region in the chemical space surrounding both the model descriptors and modeled response. In the construction of a QSAR model, the AD of molecules plays a deciding role in estimating the uncertainty in the prediction of a particular compound based on how similar it is to the compounds used to build the model. Therefore, the prediction of a modeled response using QSAR is applicable only if the compound being predicted falls within the AD of the model, as it is impractical to predict an entire universe of chemicals using a single QSAR model. Again, AD can be described as the physicochemical, structural, or biological space information based on which the training set of the model is developed, and the model is applicable to make predictions for new compounds within the specific domain.</i></g></p>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="training-file" class="file-label">
+                <input type="file" id="training-file" name="training_file" accept=".csv">
+                <span class="file-name">Upload Training File</span>
+            </label>
+            <br>
+            <label for="test-file" class="file-label">
+                <input type="file" id="test-file" name="test_file" accept=".csv">
+                <span class="file-name">Upload Test File</span>
+            </label>
+            <br>
+            <button type="submit" class="upload-btn">Calculate PCA Applicability Domain</button>
+        </form>
+    </div>
+        <p>© Copyright, <i>Adnane Aouidate</i></p>
+</body>
+</html>
