@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,16 +19,19 @@
             height: 100vh;
             color: #444;
         }
+
         .logo {
-            width: 200px; /* Increase the size here */
+            width: 200px;
             margin-bottom: 20px;
         }
+
         h1 {
             font-size: 2.8rem;
             margin-bottom: 20px;
             color: #333;
             text-align: center;
         }
+
         p {
             font-size: 1.2rem;
             margin-bottom: 40px;
@@ -35,34 +39,41 @@
             max-width: 600px;
             line-height: 1.6;
         }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
+
+        .dropdown-container {
+            margin-bottom: 20px;
+            position: relative;
         }
-        .btn {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
+
+        .dropdown {
+            width: 250px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            background-color: #ffffff;
+            color: #444;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            outline: none;
+            appearance: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        .btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-3px);
+
+        .dropdown:focus {
+            border-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .btn:active {
-            transform: translateY(1px);
+
+        .dropdown::after {
+            content: '▼';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
         }
+
         .footer {
             position: absolute;
             bottom: 20px;
@@ -71,17 +82,31 @@
         }
     </style>
 </head>
+
 <body>
     {% load static %}
     <img src="{% static 'img/logo.png' %}" alt="ChemDome Logo" class="logo">
     <h1>Welcome to ChemDome: Your Cheminformatics Hub!</h1>
     <p>Choose a tool from our suite to witness the magic of our website.</p>
-    <div class="button-container">
-        <a href="{% url 'pca_calculate' %}" class="btn">Applicability Domain based on PCA</a>
-        <a href="{% url 'domain_calculate' %}" class="btn">Applicability Domain based on Leverage</a>
+    <div class="dropdown-container">
+        <select id="app-selector" class="dropdown" onchange="navigateToApp()">
+            <option value="">Select an Application</option>
+            <option value="{% url 'pca_calculate' %}">Applicability Domain based on PCA</option>
+            <option value="{% url 'domain_calculate' %}">Applicability Domain based on Leverage</option>
+        </select>
     </div>
     <div class="footer">
         &copy; 2024 Adnane Aouidate. All rights reserved.
     </div>
+
+    <script>
+        function navigateToApp() {
+            const selectedUrl = document.getElementById('app-selector').value;
+            if (selectedUrl) {
+                window.location.href = selectedUrl;
+            }
+        }
+    </script>
 </body>
+
 </html>

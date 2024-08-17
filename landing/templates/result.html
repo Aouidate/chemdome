@@ -1,42 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicability Domain Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        h1 {text-align: center;}
-        /* p {text-align: right;} */
-        /* div {text-align: center;} */
-            /* Optional CSS to display list items in one line */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #444;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 20px 0;
+            color: #333;
+            text-align: center;
+        }
+        p {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.6;
+        }
         .list-container {
-        white-space: nowrap;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 10px 0;
         }
         .list-item {
-        display: inline;
-        margin-right: 10px;
+            display: inline;
+            margin-right: 10px;
         }
-        </style>
-    <title>Applicability Domain Results</title>
+        .plot-container {
+            margin: 20px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <h1>Applicability Domain Results</h1>
-    <img src="data:image/png;base64,{{ plot_data }}" alt="Plot">
-
-    <p>{{ train_points_in_ad }} % of trainning set are inside the AD</p>
+    
+    <div class="plot-container">
+        <img src="data:image/png;base64,{{ plot_data }}" alt="Plot">
+    </div>
+    
+    <p>{{ train_points_in_ad }} % of training set are inside the AD</p>
     <div class="list-container">
         The following chemicals 
         {% for item in Llabels_out_train %}
           <span class="list-item">{{ item }}</span>
         {% endfor %}
-        from the training set are considered as outliers
-      </div>
-
+        from the training set are considered as outliers.
+    </div>
+    
     <p>{{ test_points_in_ad }} % of test set are inside the AD</p>
     <div class="list-container">
         The following chemicals 
         {% for item in Llabels_out_test %}
           <span class="list-item">{{ item }}</span>
         {% endfor %}
-        from the test set are considered as outliers
-      </div>
-    <!-- <p>{{Llabels_out_test }}.join(", ") of the test set are outliers </p> -->
+        from the test set are considered as outliers.
+    </div>
+    
+    <div class="footer">
+        &copy; 2024 Adnane Aouidate. All rights reserved.
+    </div>
 </body>
 </html>
