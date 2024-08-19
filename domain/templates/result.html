@@ -1,42 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicability Domain Results</title>
     <style>
-        h1 {text-align: center;}
-        /* p {text-align: right;} */
-        /* div {text-align: center;} */
-            /* Optional CSS to display list items in one line */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        p {
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
         .list-container {
-        white-space: nowrap;
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 8px;
         }
         .list-item {
-        display: inline;
-        margin-right: 10px;
+            display: inline;
+            margin-right: 10px;
+            color: #007bff;
         }
-        </style>
-    <title>Applicability Domain Results</title>
+        .btn {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            padding: 10px 20px;
+            margin: 20px auto;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(1px);
+        }
+    </style>
 </head>
 <body>
-    <h1>Applicability Domain Results</h1>
-    <img src="data:image/png;base64,{{ plot_data }}" alt="Plot">
+    <div class="container">
+        <h1>Applicability Domain Results</h1>
+        
+        <img id="plot-image" src="data:image/png;base64,{{ plot_data }}" alt="Plot">
 
-    <p>{{ train_points_in_ad }} % of trainning set are inside the AD</p>
-    <div class="list-container">
-        The following chemicals 
-        {% for item in Llabels_out_train %}
-          <span class="list-item">{{ item }}</span>
-        {% endfor %}
-        from the training set are considered as outliers
-      </div>
+        <p>{{ train_points_in_ad }}% of the training set is inside the AD.</p>
+        <div class="list-container">
+            The following chemicals 
+            {% for item in Llabels_out_train %}
+                <span class="list-item">{{ item }}</span>
+            {% endfor %}
+            are considered outliers in the training set.
+        </div>
 
-    <p>{{ test_points_in_ad }} % of test set are inside the AD</p>
-    <div class="list-container">
-        The following chemicals 
-        {% for item in Llabels_out_test %}
-          <span class="list-item">{{ item }}</span>
-        {% endfor %}
-        from the test set are considered as outliers
-      </div>
-    <!-- <p>{{Llabels_out_test }}.join(", ") of the test set are outliers </p> -->
+        <p>{{ test_points_in_ad }}% of the test set is inside the AD.</p>
+        <div class="list-container">
+            The following chemicals 
+            {% for item in Llabels_out_test %}
+                <span class="list-item">{{ item }}</span>
+            {% endfor %}
+            are considered outliers in the test set.
+        </div>
+
+        <button class="btn" onclick="downloadResults()">Download Results as PNG</button>
+    </div>
+
+    <script>
+        function downloadResults() {
+            const img = document.getElementById('plot-image');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const imgWidth = img.naturalWidth;
+            const imgHeight = img.naturalHeight;
+
+            // Set canvas dimensions
+            canvas.width = imgWidth;
+            canvas.height = imgHeight + 200; // Extra space for text
+
+            // Draw the plot image
+            ctx.drawImage(img, 0, 0);
+
+            // Set font properties and draw the text
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+
+            ctx.fillText('{{ train_points_in_ad }}% of the training set is inside the AD', imgWidth / 2, imgHeight + 30);
+            ctx.fillText('The following chemicals:', imgWidth / 2, imgHeight + 60);
+
+            // Draw training set outliers
+            const trainOutliers = [{% for item in Llabels_out_train %}'{{ item }}',{% endfor %}];
+            let yOffset = imgHeight + 90;
+            trainOutliers.forEach((item, index) => {
+                ctx.fillText(item, imgWidth / 2, yOffset + (index * 20));
+            });
+
+            ctx.fillText('{{ test_points_in_ad }}% of the test set is inside the AD', imgWidth / 2, imgHeight + 150);
+            ctx.fillText('The following chemicals:', imgWidth / 2, imgHeight + 180);
+
+            // Draw test set outliers
+            const testOutliers = [{% for item in Llabels_out_test %}'{{ item }}',{% endfor %}];
+            yOffset = imgHeight + 210;
+            testOutliers.forEach((item, index) => {
+                ctx.fillText(item, imgWidth / 2, yOffset + (index * 20));
+            });
+
+            // Convert canvas to PNG
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'results.png';
+            link.click();
+        }
+    </script>
 </body>
 </html>

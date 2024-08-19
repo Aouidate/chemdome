@@ -41,14 +41,36 @@
         }
         .plot-container {
             margin: 20px 0;
+            text-align: center;
         }
         img {
             max-width: 100%;
             height: auto;
         }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(1px);
+        }
         .footer {
-            position: absolute;
-            bottom: 20px;
+            margin-top: 40px;
             font-size: 0.9rem;
             color: #666;
         }
@@ -58,7 +80,9 @@
     <h1>Applicability Domain Results</h1>
     
     <div class="plot-container">
-        <img src="data:image/png;base64,{{ plot_data }}" alt="Plot">
+        <img id="plot-image" src="data:image/png;base64,{{ plot_data }}" alt="Plot">
+        <br>
+        <button class="btn" onclick="downloadImage()">Download Plot</button>
     </div>
     
     <p>{{ train_points_in_ad }} % of training set are inside the AD</p>
@@ -82,5 +106,17 @@
     <div class="footer">
         &copy; 2024 Adnane Aouidate. All rights reserved.
     </div>
+
+    <script>
+        function downloadImage() {
+            const image = document.getElementById('plot-image');
+            const link = document.createElement('a');
+            link.href = image.src;
+            link.download = 'plot.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>
