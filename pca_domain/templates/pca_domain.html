@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Data for PCA Applicability Domain{% endblock %}
+
+{% block content %}
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-5">
+    <!-- Page Title -->
+    <div class="text-center">
+        <h1 class="display-6 text-primary"><i>Applicability Domain for 2D-QSAR Models Using PCA Bounding Box</i></h1>
+        <p class="text-muted">
+            AD is a theoretical region in the chemical space surrounding both the model descriptors and modeled
+            response. It plays a crucial role in estimating uncertainty in the prediction of a compound. Predictions
+            using QSAR models are valid only if the compounds fall within the AD, ensuring reliability in the model's
+            results.
+        </p>
+    </div>
+
+    <!-- Form Section -->
+    <div class="card shadow p-4 mt-4">
+        <h4 class="card-title text-center text-secondary">Upload Files</h4>
+        <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="training-file" class="form-label">Upload Training File</label>
+                <input type="file" id="training-file" name="training_file" accept=".csv" class="form-control" required>
+                <div class="invalid-feedback">Please upload a training file.</div>
+            </div>
+            <div class="mb-3">
+                <label for="test-file" class="form-label">Upload Test File</label>
+                <input type="file" id="test-file" name="test_file" accept=".csv" class="form-control" required>
+                <div class="invalid-feedback">Please upload a test file.</div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Calculate PCA Applicability Domain</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    {% if plot_data %}
+    <div class="mt-5">
+        <h4 class="text-center text-success">Applicability Domain Results</h4>
+        <div class="text-center my-4">
+            <img src="data:image/png;base64,{{ plot_data }}" alt="Plot" class="img-fluid rounded shadow">
+        </div>
+        <div class="alert alert-info">
+            <strong>{{ train_points_in_ad }}%</strong> of the training set are inside the AD.
+        </div>
+        <div class="alert alert-warning">
+            <strong>Outliers in Training Set:</strong>
+            {% for item in Llabels_out_train %}
+                <span class="badge bg-danger">{{ item }}</span>
+            {% endfor %}
+        </div>
+        <div class="alert alert-info">
+            <strong>{{ test_points_in_ad }}%</strong> of the test set are inside the AD.
+        </div>
+        <div class="alert alert-warning">
+            <strong>Outliers in Test Set:</strong>
+            {% for item in Llabels_out_test %}
+                <span class="badge bg-danger">{{ item }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Add Bootstrap validation for form fields
+    (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

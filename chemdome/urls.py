@@ -16,17 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from domain import views as domain_views
-from pca_app import views as pca_views
+from leverage_domain import views as domain_views
+from pca_domain import views as pca_views
 from landing import views as landing_views
+from sali import views as sali_views
 #from domain.views import calculate_domain
 #from pca_app.views import calculate_domain
 
 
 urlpatterns = [
-    path('', landing_views.home, name='home'),
+    #path('', landing_views.home, name='home'),
+    path('', include('landing.urls')),  # Includes landing page URLs
     path('domain/', domain_views.calculate_domain, name='domain_calculate'),
     path('pca/', pca_views.calculate_domain, name='pca_calculate'),
+    path('sali/', sali_views.calculate_sali, name='calculate_sali'),
+
+
+#    path('pca_calculate/', include('pca_domain.urls')),  # PCA app URL
+#    path('leverage/', include('leverage_domain.urls')),  # Applicability domain URL
 ]
 
 #/ urls.py project folder

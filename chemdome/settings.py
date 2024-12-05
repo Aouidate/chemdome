@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'domain',
-    'pca_app',
+    'leverage_domain',
+    'pca_domain',
     'landing',
+    'sali',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +59,13 @@ ROOT_URLCONF = 'chemdome.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),  # Add shared templates folder
+            os.path.join(BASE_DIR, 'landing/templates'),
+            os.path.join(BASE_DIR, 'pca_domain/templates'),    # Add app1 templates
+            os.path.join(BASE_DIR, 'leverage_domain/templates'),    # Add app2 templates
+            os.path.join(BASE_DIR, 'sali/templates'),    # Add app3 templates
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +77,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'chemdome.wsgi.application'
 
@@ -118,7 +127,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Point to your static folder
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

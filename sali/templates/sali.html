@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Activity Cliff Detection{% endblock %}
+
+{% block content %}
+{% load static %}
+<!-- Include Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container py-5">
+    <h1 class="text-center mb-4">Detect Activity Cliffs (SALI Analysis)</h1>
+    <p class="text-center text-muted mb-4">
+        Upload your dataset to identify activity cliffs based on SALI. Customize the activity difference and similarity threshold parameters for analysis.
+    </p>
+
+    <!-- Upload Section -->
+    <div class="card shadow p-4 mb-4">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="fileInput" class="form-label">Upload Dataset</label>
+                <input type="file" id="fileInput" name="file" class="form-control" required>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="activityDifference" class="form-label">Activity Difference</label>
+                    <input type="number" id="activityDifference" name="activity_difference" step="0.1" min="0" value="2.0" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label for="similarityThreshold" class="form-label">Similarity Threshold</label>
+                    <input type="number" id="similarityThreshold" name="similarity_threshold" step="0.05" min="0" max="1" value="0.9" class="form-control">
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">Analyze</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Error Message -->
+    {% if error %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Results -->
+    {% if clifs %}
+    <div class="card shadow p-4">
+        <h2 class="text-center mb-4">Results</h2>
+        {% if img_url %}
+        <div class="text-center mb-4">
+            <img src="{{ img_url }}" alt="SALI Plot" class="img-fluid">
+        </div>
+        {% endif %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Similarity</th>
+                        <th>Delta</th>
+                        <th>SMILES_i</th>
+                        <th>SMILES_j</th>
+                        <th>pIC50_i</th>
+                        <th>pIC50_j</th>
+                        <th>SALI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in clifs %}
+                    <tr>
+                        <td>{{ row.Similarity }}</td>
+                        <td>{{ row.Delta }}</td>
+                        <td>{{ row.SMILES_i }}</td>
+                        <td>{{ row.SMILES_j }}</td>
+                        <td>{{ row.pIC50_i }}</td>
+                        <td>{{ row.pIC50_j }}</td>
+                        <td>{{ row.SALI }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Include Bootstrap JS (optional for interactivity) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

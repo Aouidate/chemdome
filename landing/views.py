@@ -1,15 +1,21 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render
-
-from django.shortcuts import render
 
 def home(request):
     return render(request, 'homepage.html')
 
+def about_us(request):
+    return render(request, 'about_us.html')
+
+def contact_us(request):
+    return render(request, 'contact_us.html')
+
 def pca_view(request):
-    return render(request, 'domain/templates/upload.html')
+    return render(request, 'leverage_domain/templates/leverage_domain.html')
 
 def domain_view(request):
-    return render(request, 'pca_app/templates/upload.html')
+    return render(request, 'pca_domain/templates/pca_domain.html')
+
+def sali(request):
+    return render(request, 'sali/templates/sali.html')

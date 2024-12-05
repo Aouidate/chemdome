@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    text-align: center;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.description {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.file-input, .input-box, .btn-submit {
+    margin: 10px 0;
+    padding: 10px;
+    width: 80%;
+    font-size: 1rem;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+.results {
+    margin-top: 20px;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.results-table th, .results-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.results-table th {
+    background-color: #f2f2f2;
+}

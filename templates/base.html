@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ChemDome{% endblock %}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for icons (optional) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fb;
+            color: #444;
+            margin: 0;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #2C3E50;
+            color: white;
+            padding: 15px 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        header nav ul li {
+            margin: 0 25px;
+        }
+
+        header nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        header nav ul li a:hover {
+            background-color: #2980B9;
+            transform: scale(1.05);
+        }
+
+        /* Main content area */
+        main {
+            margin-top: 100px;  /* Push content below fixed header */
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #2C3E50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Dropdown styling */
+        .dropdown-container {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .dropdown {
+            width: 300px;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: 2px solid #2980B9;
+            background-color: #fff;
+            color: #444;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dropdown:focus {
+            border-color: #1abc9c;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown::after {
+            content: '▼';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dropdown {
+                width: 80%;
+            }
+
+            header nav ul {
+                flex-direction: column;
+            }
+
+            header nav ul li {
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Subtle Animation */
+        .logo {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    {% load static %}
+
+    <!-- Logo -->
+    <img src="{% static 'img/logo.png' %}" alt="ChemDome Logo" class="logo" style="width: 200px; margin-bottom: 30px;">
+
+    <!-- Header with navigation -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about-us">About Us</a></li>
+                <li><a href="/contact-us">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        <h1>Welcome to ChemDome: Your Cheminformatics Hub!</h1>
+        <p>Explore our powerful tools and discover the latest in chemical informatics. Choose a tool from the list below and dive into the world of data analysis!</p>
+        <div class="dropdown-container">
+            <select id="app-selector" class="dropdown" onchange="navigateToApp()">
+                <option value="">Select an Application</option>
+                <option value="{% url 'pca_calculate' %}">Applicability Domain based on PCA</option>
+                <option value="{% url 'domain_calculate' %}">Applicability Domain based on Leverage</option>
+                <option value="{% url 'calculate_sali' %}">Applicability Domain based on Leverage</option>
+            </select>
+        </div>
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2024 Adnane Aouidate. All rights reserved. | <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms">Terms of Service</a>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function navigateToApp() {
+            const selectedUrl = document.getElementById('app-selector').value;
+            if (selectedUrl) {
+                window.location.href = selectedUrl;
+            }
+        }
+    </script>
+</body>
+
+</html>
