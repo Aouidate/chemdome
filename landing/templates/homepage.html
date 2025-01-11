@@ -1,21 +1,40 @@
-<!-- landing/templates/homepage.html -->
 {% extends "base.html" %}
 
-{% block title %} Home - Chemdome {% endblock %}
+{% block title %}Home - AD-QSAR{% endblock %}
 
 {% block content %}
-    {% load static %} 
-    <img src="{% static 'img/logo.png' %}" alt="ChemDome Logo" class="logo">
-    <h1>Welcome to ChemDome: Your Cheminformatics Hub!</h1>
-    <p>Choose a tool from our suite to witness the magic of our website.</p>
+    {% load static %}
 
-    <div class="dropdown-container">
-        <select id="app-selector" class="dropdown" onchange="navigateToApp()">
-            <option value="">Select an Application</option>
-            <option value="{% url 'pca_calculate' %}">Applicability Domain based on PCA</option>
-            <option value="{% url 'domain_calculate' %}">Applicability Domain based on Leverage</option>
-            <option value="{% url 'calculate_sali' %}">SALI</option>
-        </select>
+    <div class="container py-5 text-center">
+        <!-- Welcome Section -->
+        <h1 class="mb-4">Welcome to <span style="color: #FFC300;">AD-QSAR</span></h1>
+        
+        <a href="{% url 'home' %}">
+            <img src="{% static 'img/logo.png' %}" alt="AD-QSAR Logo" class="logo mb-4" width="200">
+        </a>
+
+        <h2 class="mb-4 text-primary">Your Gateway to Applicability Domain in QSAR Models</h2>
+
+        <p class="lead text-muted mb-5" style="color: #555;">
+            In the ever-evolving fields of drug discovery and toxicity/risk assessment, understanding the Applicability Domain (AD) of 
+            Quantitative/Classification Structure-Activity/Property/Toxicity Relationship (QSAR/QSPR/QSTR) models is essential for ensuring 
+            the reliability and robustness of predictive models. At <strong style="color: #FFC300;">AD-QSAR</strong>, we offer a comprehensive platform with cutting-edge 
+            methodologies and tools to enhance your QSAR modeling experience.
+        </p>
+
+        <!-- Call to Action Section -->
+        <h5 class="mb-4" style="color: #3B5998;">Choose a tool from our suite to explore the power of AD-QSAR:</h5>
+        
+        <div class="dropdown-container mx-auto" style="max-width: 400px;">
+            <select id="app-selector" class="form-select form-select-lg dropdown" onchange="navigateToApp()">
+                <option value="" selected>Select an Application</option>
+                <option value="{% url 'domain_calculate' %}">Applicability Domain based on Leverage</option>
+                <option value="{% url 'knn_calculate' %}">Applicability Domain based on KNN</option>
+                <option value="{% url 'pca_calculate' %}">Applicability Domain based on PCA</option>
+                <!-- Future Feature -->
+                <!-- <option value="{% url 'calculate_sali' %}">Applicability Domain based on SALI</option> -->
+            </select>
+        </div>
     </div>
 {% endblock %}
 

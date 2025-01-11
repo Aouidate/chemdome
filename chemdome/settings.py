@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-*@pt(l+t*m2_6wcw^6y_qky_e&k^h6l8nbkl3(3f6@9!p^icg!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'leverage_domain',
     'pca_domain',
+    'knn_domain',
     'landing',
     'sali',
 ]

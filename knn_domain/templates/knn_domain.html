@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Applicability Domain Based on K-NN{% endblock %}
+
+{% block content %}
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-5"> 
+    <!-- Page title -->
+    <div class= "text-center">
+        <h1 class="display-6 text-primary"><i> Applicability Domain Based on KNN Similarity</i></h1>
+        <p class="text-muted">The AD is defined based on the similarity between a test 
+            compound and its nearest neighbors in the training set.
+        </p>
+    </div>
+<!-- Form for file uploads -->
+<div class="card shadow p-4 mt-4">
+    <h4 class="card-title text-center text-secondary">Upload Files</h4>
+    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="training-file" class="file-label">Upload Training File</label>
+            <input type="file" id="training-file" name="training_file" accept=".csv" class="form-control" required>
+            <div class="invalid-feedback">Please upload a training file.</div>
+        </div>
+        <div class="mb-3">
+            <label for="test-file" class="file-label">Upload Test File</label>
+            <input type="file" id="test-file" name="test_file" accept=".csv" class="form-control" required>
+            <div class="invalid-feedback">Please upload a test file.</div>
+        </div>
+        <div class="col-md-auto">
+            <label for="k" class="form-label">K-neighbors</label>
+            <input type="number" id="k" name="k" step="1.0" min="0" value="5" class="form-control">
+        </div>
+        <div class = "text-center">
+        <button type="submit" class="btn btn-primary">Calculate Applicability Domain</button>
+        </div>
+    </form>
+</div>
+
+<!-- Display Results if the calculation has been performed -->
+ <!-- Results Section -->
+ {% if plot_data %}
+ <div class="mt-5">
+     <h4 class="text-center text-success">Applicability Domain Results</h4>
+     <div class="text-center my-4">
+         <img src="data:image/png;base64,{{ plot_data }}" alt="Plot" class="img-fluid rounded shadow">
+     </div>
+     <div class="alert alert-info">
+         <strong>{{ train_points_in_ad }}%</strong> of the training set are inside the AD.
+     </div>
+     <div class="alert alert-warning">
+         <strong>Outliers in Training Set:</strong>
+         {% for item in Llabels_out_train %}
+             <span class="badge bg-danger">{{ item }}</span>
+         {% endfor %}
+     </div>
+     <div class="alert alert-info">
+         <strong>{{ test_points_in_ad }}%</strong> of the test set are inside the AD.
+     </div>
+     <div class="alert alert-warning">
+         <strong>Outliers in Test Set:</strong>
+         {% for item in Llabels_out_test %}
+             <span class="badge bg-danger">{{ item }}</span>
+         {% endfor %}
+     </div>
+ </div>
+
+        <button class="btn" onclick="downloadResults()">Download Results as PNG</button>
+</div>
+{% endif %}
+{% endblock %}
+
+<script>
+function downloadResults() {
+    const img = document.getElementById('plot-image');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
+
+    // Set canvas dimensions
+    canvas.width = imgWidth;
+    canvas.height = imgHeight + 200; // Extra space for text
+
+    // Draw the plot image
+    ctx.drawImage(img, 0, 0);
+
+    // Set font properties and draw the text
+    ctx.font = '16px Arial';
+    ctx.fillStyle = '#333';
+    ctx.textAlign = 'center';
+
+    ctx.fillText('{{ train_points_in_ad }}% of the training set is inside the AD', imgWidth / 2, imgHeight + 30);
+    ctx.fillText('The following chemicals:', imgWidth / 2, imgHeight + 60);
+
+    // Draw training set outliers
+    const trainOutliers = [{% for item in Llabels_out_train %}'{{ item }}',{% endfor %}];
+    let yOffset = imgHeight + 90;
+    trainOutliers.forEach((item, index) => {
+        ctx.fillText(item, imgWidth / 2, yOffset + (index * 20));
+    });
+
+    ctx.fillText('{{ test_points_in_ad }}% of the test set is inside the AD', imgWidth / 2, imgHeight + 150);
+    ctx.fillText('The following chemicals:', imgWidth / 2, imgHeight + 180);
+
+    // Draw test set outliers
+    const testOutliers = [{% for item in Llabels_out_test %}'{{ item }}',{% endfor %}];
+    yOffset = imgHeight + 210;
+    testOutliers.forEach((item, index) => {
+        ctx.fillText(item, imgWidth / 2, yOffset + (index * 20));
+    });
+
+    // Convert canvas to PNG
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = 'results.png';
+    link.click();
+}
+</script>

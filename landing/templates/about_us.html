@@ -1,9 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}About Us - Chemdome{% endblock %}
+{% block title %}About - AD-QSAR{% endblock %}
 
 {% block content %}
-    <h1>About Us</h1>
-    <p>Welcome to Chemdome! We are a team dedicated to advancing cheminformatics.</p>
-    <p>Our mission is to provide tools and insights for cheminformatics applications...</p>
+    <style>
+        .about-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #3B5998;
+            text-align: center;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 20px;
+        }
+        p {
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .methodology {
+            background-color: #ecf0f1;
+            border-left: 5px solid #2980b9;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+
+    <div class="about-container">
+        <h1>About Us</h1>
+        <h2>Why Choose AD-XSAR?</h2>
+        
+        <div class="methodology">
+            <span class="bold">Diverse Methodologies:</span> Explore a variety of approaches tailored to assess the applicability domain of your QSAR models, empowering you to make informed decisions in your research.
+        </div>
+        
+        <div class="methodology">
+            <span class="bold">User-Friendly Interface:</span> Our intuitive design ensures that both seasoned researchers and newcomers can navigate the platform with ease.
+        </div>
+
+        <div class="methodology">
+            <span class="bold">Citation:</span> If you make use of the AD-XSAR Platform material in scientific publications, please cite our respective articles:
+        </div>
+    </div>
 {% endblock %}
